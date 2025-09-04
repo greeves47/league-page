@@ -16,6 +16,15 @@ import { browser } from '$app/environment';
  * @returns {Object} { allTimeBiggestBlowouts, allTimeClosestMatchups, leastSeasonLongPoints, mostSeasonLongPoints, leagueWeekLows, leagueWeekHighs, seasonWeekRecords, leagueManagerRecords, currentYear, lastYear}
  */
 export const getLeagueRecords = async (refresh = false) => {
+	const seasonToSkip = 2019; // Set season to skip
+	let curSeason = leagueID;
+
+	// Skip the data fetching for the specific season
+    if (curSeason === seasonToSkip) {
+        console.log(`Skipping season ${seasonToSkip}`);
+        return null; // Return null or an empty object to indicate no data is fetched for this season
+    }
+	
 	// records temporarily cached for an individual session
 	if(get(records).leagueWeekHighs) {
 		return get(records);
