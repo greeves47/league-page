@@ -84,6 +84,12 @@ export const getLeagueRecords = async (refresh = false) => {
 			year,
 		} = await processRegularSeason({leagueData, rosters, curSeason, week, regularSeason})
 
+		// Skip seasons before 2021
+		if (year < 2021) {
+			curSeason = season;  // Skip to next season
+			continue;  // Skip to next iteration of the loop
+		}
+		
 		// post season data
 		const pS = await processPlayoffs({year, curSeason, week, playoffRecords, rosters})
 
