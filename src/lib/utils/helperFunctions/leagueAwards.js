@@ -19,6 +19,8 @@ export const getAwards = async () => {
 	return podiums;
 }
 
+const excludedSeasons = [2019, 2020]; // Add years you want to exclude
+
 const getPodiums = async (previousSeasonID) => {
 	const podiums = [];
 
@@ -36,6 +38,12 @@ const getPodiums = async (previousSeasonID) => {
 			toiletRounds,
 			leagueMetadata
 		} = previousSeasonData;
+
+		// Exclude by year
+		if (excludedSeasons.includes(parseInt(year))) {
+			previousSeasonID = previousSeasonData.previousSeasonID;
+			continue;
+		}
 
 		previousSeasonID = previousSeasonData.previousSeasonID;
 
