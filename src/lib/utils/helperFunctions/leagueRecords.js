@@ -63,6 +63,9 @@ export const getLeagueRecords = async (refresh = false) => {
 	// necessary to display playoff records
 	let playoffRecords = new Records();
 
+	// List of season IDs to exclude (adjust these IDs based on your data)
+	const excludedSeasonIDs = [517113763118989312, 436946484563275776  // Add the IDs of seasons you want to exclude
+
 	// loop through each season until the previous_league_id becomes null (or in some cases 0)
 	while(curSeason && curSeason != 0) {
 		const [rosterRes, leagueData] = await waitForAll(
@@ -84,8 +87,8 @@ export const getLeagueRecords = async (refresh = false) => {
 			year,
 		} = await processRegularSeason({leagueData, rosters, curSeason, week, regularSeason})
 
-		// Skip seasons before 2021
-		if (year < 2021) {
+		// Skip specific season IDs (e.g., exclude 2019 and 2020)
+		if (excludedSeasonIDs.includes(season)) {
 			curSeason = season;  // Skip to next season
 			continue;  // Skip to next iteration of the loop
 		}
