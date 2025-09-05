@@ -47,13 +47,6 @@ export const getLeagueRecords = async (refresh = false) => {
 	// league page leagueID
 	let curSeason = leagueID;
 
-	// **Exclude specific league IDs**
-	const excludedLeagueIds = ["436946484563275776", "517113763118989312"];
-	if (excludedLeagueIds.includes(curSeason)) {
-		console.log(`Excluding league ID: ${curSeason}`);
-		return {};  // Return empty object or handle exclusion
-	}
-
 	// currentYear will eventually be assigned as the most recent year
 	// that has record information (current season if past week 1,
 	// previous season if not)
@@ -73,7 +66,13 @@ export const getLeagueRecords = async (refresh = false) => {
 
 	// loop through each season until the previous_league_id becomes null (or in some cases 0)
 	while(curSeason && curSeason != 0) {
-		console.log(season)
+
+		// **Exclude specific league IDs**
+		const excludedLeagueIds = ["436946484563275776", "517113763118989312"];
+		if (excludedLeagueIds.includes(curSeason)) {
+			console.log(`Excluding league ID: ${curSeason}`);
+			return {};  // Return empty object or handle exclusion
+		}
 		
 		const [rosterRes, leagueData] = await waitForAll(
 			getLeagueRosters(curSeason),
