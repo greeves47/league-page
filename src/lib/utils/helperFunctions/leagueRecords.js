@@ -16,9 +16,6 @@ import { browser } from '$app/environment';
  * @returns {Object} { allTimeBiggestBlowouts, allTimeClosestMatchups, leastSeasonLongPoints, mostSeasonLongPoints, leagueWeekLows, leagueWeekHighs, seasonWeekRecords, leagueManagerRecords, currentYear, lastYear}
  */
 
-// Define the IDs to exclude
-const excludedSeasonIDs = ['517113763118989312', '436946484563275776'];
-
 export const getLeagueRecords = async (refresh = false) => {
 	
 	// records temporarily cached for an individual session
@@ -89,13 +86,7 @@ export const getLeagueRecords = async (refresh = false) => {
 			season,
 			year,
 		} = await processRegularSeason({leagueData, rosters, curSeason, week, regularSeason})
-
-		// Exclude specific season IDs
-		if (excludedSeasonIDs.includes(season)) {
-			curSeason = season;  // Skip to next season
-			continue;  // Skip to the next iteration of the loop
-		}
-		
+	
 		// post season data
 		const pS = await processPlayoffs({year, curSeason, week, playoffRecords, rosters})
 
