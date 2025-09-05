@@ -5,6 +5,8 @@ import { waitForAll } from './multiPromise';
 import { getRosterIDFromManagerIDAndYear } from '$lib/utils/helperFunctions/universalFunctions';
 import { getLeagueTeamManagers } from "./leagueTeamManagers";
 
+const excludedSeasons = [2019, 2020]; // Add years you want to exclude
+
 export const getRivalryMatchups = async (userOneID, userTwoID) => {
     if(!userOneID || !userTwoID) {
         return;
@@ -40,6 +42,14 @@ export const getRivalryMatchups = async (userOneID, userTwoID) => {
     while(curLeagueID && curLeagueID != 0) {
         const leagueData = await getLeagueData(curLeagueID).catch((err) => { console.error(err); });
         const year = leagueData.season;
+
+        // Exclude by year
+        if (excludedSeasons.includes(parseInt(year))) {
+            curLeagueID = leagueData.previous_league_id;
+            week = 18;
+            continue;
+        }
+
         const rosterIDOne = getRosterIDFromManagerIDAndYear(teamManagers, userOneID, year);
         const rosterIDTwo = getRosterIDFromManagerIDAndYear(teamManagers, userTwoID, year);
         if(!rosterIDOne || !rosterIDTwo || rosterIDOne == rosterIDTwo) {
