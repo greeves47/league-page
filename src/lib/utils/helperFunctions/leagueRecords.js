@@ -52,7 +52,7 @@ export const getLeagueRecords = async (refresh = false) => {
 
 	// initiate current season to be your current
 	// league page leagueID
-	let curSeason = leagueID;
+	// let curSeason = leagueID;
 
 	// currentYear will eventually be assigned as the most recent year
 	// that has record information (current season if past week 1,
