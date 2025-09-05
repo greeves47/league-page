@@ -85,6 +85,8 @@ const checkPreview = (preview, passedTransactions) => {
 	return passedTransactions;
 }
 
+const excludedSeasons = [2019, 2020]; // Add years you want to exclude
+
 const combThroughTransactions = async (week, currentLeagueID) => {
 	week = week > 0 ? week : 1;
 	
@@ -94,6 +96,12 @@ const combThroughTransactions = async (week, currentLeagueID) => {
 	while(currentLeagueID && currentLeagueID != 0) {
 		// gather supporting info simultaneously
 		const leagueData = await getLeagueData(currentLeagueID).catch((err) => { console.error(err); });
+
+		// Exclude by year
+		if (excludedSeasons.includes(parseInt(leagueData.season))) {
+			currentLeagueID = leagueData.previous_league_id;
+			continue;
+		}
 
 		leagueIDs.push(currentLeagueID);
 

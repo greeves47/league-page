@@ -183,6 +183,8 @@ const completedAuction = ({players, draft, draftOrder, draftOrderObj}) => {
 	return draft;
 }
 
+const excludedSeasons = [2019, 2020]; // Add years you want to exclude
+
 export const getPreviousDrafts = async () => {
 	if(get(previousDrafts).length > 0) {
 		return get(previousDrafts);
@@ -203,7 +205,10 @@ export const getPreviousDrafts = async () => {
         for(const completedDraft of completedDrafts) {
             const draftID = completedDraft.draft_id;
             const year = parseInt(completedDraft.season);
-        
+
+            // Exclude by year
+            if (excludedSeasons.includes(year)) continue;
+
             const [officialDraftRes, picksRes, playersRes] = await waitForAll(
                 fetch(`https://api.sleeper.app/v1/draft/${draftID}`, {compress: true}),
                 fetch(`https://api.sleeper.app/v1/draft/${draftID}/traded_picks`, {compress: true}),

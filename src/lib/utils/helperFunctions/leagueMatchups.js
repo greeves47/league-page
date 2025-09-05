@@ -5,6 +5,8 @@ import { waitForAll } from './multiPromise';
 import { get } from 'svelte/store';
 import {matchupsStore} from '$lib/stores';
 
+const excludedSeasons = [2019, 2020]; // Add years you want to exclude
+
 export const getLeagueMatchups = async () => {
 	if(get(matchupsStore).matchupWeeks) {
 		return get(matchupsStore);
@@ -23,6 +25,11 @@ export const getLeagueMatchups = async () => {
 	}
 	const year = leagueData.season;
 	const regularSeasonLength = leagueData.settings.playoff_week_start - 1;
+
+	// Exclude by year
+	if (excludedSeasons.includes(parseInt(year))) {
+		return { matchupWeeks: [], year, week, regularSeasonLength };
+	}
 
 	// pull in all matchup data for the season
 	const matchupsPromises = [];
