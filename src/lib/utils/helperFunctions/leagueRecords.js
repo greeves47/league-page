@@ -71,7 +71,7 @@ export const getLeagueRecords = async (refresh = false) => {
 		const excludedLeagueIds = ["436946484563275776", "517113763118989312"];
 		if (excludedLeagueIds.includes(curSeason)) {
 			console.log(`Excluding league ID: ${curSeason}`);
-			return {};  // Return empty object or handle exclusion
+			continue;
 		}
 		
 		const [rosterRes, leagueData] = await waitForAll(
