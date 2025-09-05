@@ -16,7 +16,7 @@ import { browser } from '$app/environment';
  * @returns {Object} { allTimeBiggestBlowouts, allTimeClosestMatchups, leastSeasonLongPoints, mostSeasonLongPoints, leagueWeekLows, leagueWeekHighs, seasonWeekRecords, leagueManagerRecords, currentYear, lastYear}
  */
 export const getLeagueRecords = async (refresh = false) => {
-	const seasonToSkip = "2019"; // Set the season you want to skip
+	const seasonToSkip = "2019"; // Set the season you want to skip.
     let curSeason = leagueID;
 
     // Skip the data fetching for the specific season
