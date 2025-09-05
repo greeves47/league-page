@@ -88,7 +88,7 @@ export const getLeagueRecords = async (refresh = false) => {
 		} = await processRegularSeason({leagueData, rosters, curSeason, week, regularSeason})
 
 		// Skip specific season IDs (e.g., exclude 2019 and 2020)
-		if excludedLeagueIDs.includes(curSeason) {
+		if (excludedLeagueIDs.includes(curSeason)) {
 			curSeason = season;  // Skip to next season
 			continue;  // Skip to next iteration of the loop
 		}
