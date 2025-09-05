@@ -16,14 +16,6 @@ import { browser } from '$app/environment';
  * @returns {Object} { allTimeBiggestBlowouts, allTimeClosestMatchups, leastSeasonLongPoints, mostSeasonLongPoints, leagueWeekLows, leagueWeekHighs, seasonWeekRecords, leagueManagerRecords, currentYear, lastYear}
  */
 export const getLeagueRecords = async (refresh = false) => {
-	const seasonToSkip = "2019"; // Set the season you want to skip.
-    let curSeason = leagueID;
-
-    // Skip the data fetching for the specific season
-    if (curSeason === seasonToSkip) {
-        console.log(`Skipping season ${seasonToSkip}`);
-        return null; // Return null or an empty object to indicate no data is fetched for this season
-    }
 	
 	// records temporarily cached for an individual session
 	if(get(records).leagueWeekHighs) {
@@ -52,7 +44,7 @@ export const getLeagueRecords = async (refresh = false) => {
 
 	// initiate current season to be your current
 	// league page leagueID
-	// let curSeason = leagueID;
+	let curSeason = leagueID;
 
 	// currentYear will eventually be assigned as the most recent year
 	// that has record information (current season if past week 1,
