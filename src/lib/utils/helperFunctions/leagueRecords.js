@@ -64,20 +64,30 @@ export const getLeagueRecords = async (refresh = false) => {
 	// necessary to display playoff records
 	let playoffRecords = new Records();
 
+	// Add your excluded seasons here (by year or league ID)
+    const excludedSeasons = [2019, 2020]; // Example: exclude 2020 and 2021
+    // Or use league IDs: const excludedLeagueIDs = ['123456789', '987654321'];
+
 	// loop through each season until the previous_league_id becomes null (or in some cases 0)
 	while(curSeason && curSeason != 0) {
-
-		// **Exclude specific league IDs**
-		const excludedLeagueIds = ["436946484563275776", "517113763118989312"];
-		if (excludedLeagueIds.includes(curSeason)) {
-			console.log(`Excluding league ID: ${curSeason}`);
-			continue;
-		}
 		
+		// Fetch league data first to get the year
 		const [rosterRes, leagueData] = await waitForAll(
 			getLeagueRosters(curSeason),
 			getLeagueData(curSeason),
 		).catch((err) => { console.error(err); });
+
+		// Exclude by year
+		if (excludedSeasons.includes(parseInt(leagueData.season))) {
+			curSeason = leagueData.previous_league_id;
+			continue;
+		}
+
+		// Or exclude by league ID
+		// if (excludedLeagueIDs.includes(curSeason)) {
+		//     curSeason = leagueData.previous_league_id;
+		//     continue;
+		// }
 
 		const rosters = rosterRes.rosters;
 
