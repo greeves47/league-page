@@ -15,6 +15,10 @@ import { browser } from '$app/environment';
  * @param {bool} refresh if set to false, getLeagueRecords returns the records stored in localStorage
  * @returns {Object} { allTimeBiggestBlowouts, allTimeClosestMatchups, leastSeasonLongPoints, mostSeasonLongPoints, leagueWeekLows, leagueWeekHighs, seasonWeekRecords, leagueManagerRecords, currentYear, lastYear}
  */
+
+// Define the IDs to exclude
+const excludedSeasonIDs = ['517113763118989312', '436946484563275776'];
+
 export const getLeagueRecords = async (refresh = false) => {
 	
 	// records temporarily cached for an individual session
@@ -63,11 +67,10 @@ export const getLeagueRecords = async (refresh = false) => {
 	// necessary to display playoff records
 	let playoffRecords = new Records();
 
-	// List of season IDs to exclude (adjust these IDs based on your data)
-	const excludedLeagueIDs = [517113763118989312, 436946484563275776];  // Add the IDs of seasons you want to exclude
-
 	// loop through each season until the previous_league_id becomes null (or in some cases 0)
 	while(curSeason && curSeason != 0) {
+		console.log(season)
+		
 		const [rosterRes, leagueData] = await waitForAll(
 			getLeagueRosters(curSeason),
 			getLeagueData(curSeason),
@@ -87,10 +90,10 @@ export const getLeagueRecords = async (refresh = false) => {
 			year,
 		} = await processRegularSeason({leagueData, rosters, curSeason, week, regularSeason})
 
-		// Skip specific season IDs (e.g., exclude 2019 and 2020)
-		if (excludedLeagueIDs.includes(curSeason)) {
+		// Exclude specific season IDs
+		if (excludedSeasonIDs.includes(season)) {
 			curSeason = season;  // Skip to next season
-			continue;  // Skip to next iteration of the loop
+			continue;  // Skip to the next iteration of the loop
 		}
 		
 		// post season data
